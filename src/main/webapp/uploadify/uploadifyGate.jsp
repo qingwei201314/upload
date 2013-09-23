@@ -4,13 +4,9 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 <%
-	String width = request.getParameter("width");
-	String height = request.getParameter("height");
+	String widthXheight = request.getParameter("widthXheight");
 	Uploadify uploadify = new Uploadify();
-	WidthHeight widthHeight = new WidthHeight(width, height);
-	List<WidthHeight> arguments = new ArrayList<WidthHeight>();
-	arguments.add(widthHeight);
-	String result = uploadify.uplodate(request,response,arguments);
+	String result = uploadify.uplodate(request,response,widthXheight);
 	out.clear();
 	out.print(result);
 	out.flush();

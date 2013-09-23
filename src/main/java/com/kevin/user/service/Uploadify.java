@@ -3,6 +3,7 @@ package com.kevin.user.service;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -24,7 +25,17 @@ import com.kevin.util.Util;
  * @author Kevin
  */
 public class Uploadify {
-	public String uplodate(HttpServletRequest request, HttpServletResponse response, List<WidthHeight> widthHeights) throws Exception{
+	public String uplodate(HttpServletRequest request, HttpServletResponse response, String widthXheight_s) throws Exception{
+		List<WidthHeight> widthHeights = new ArrayList<WidthHeight>(); //用于存各存规格
+		
+		String[] widthXheightArray = widthXheight_s.split("_"); //分出几种规格
+		for(int i=0; i < widthXheightArray.length; i++){
+			String widthXheight = widthXheightArray[i];
+			String[] wXh = widthXheight.split("x");
+			WidthHeight widthHeight = new WidthHeight(wXh[0], wXh[1]);
+			widthHeights.add(widthHeight);
+		}
+		
 		String resultPath = "";
 		String path = "";
 	 	String phone = request.getParameter(Constant.phone);
@@ -74,10 +85,10 @@ public class Uploadify {
 							String postfix = StringUtils.substringAfterLast(fileItem.getName(),".");
 							String newpath =  path + "/" + ymdhms + "_" + widthHeight.getWidth() + "_" + widthHeight.getHeight() + "." + postfix;
 							ImageIO.write(buffImg, postfix, new File(Util.upload() + newpath));
-							if(j == 0)
-								resultPath = newpath;
+							resultPath += newpath + ",";
 						}
 					}
+					file.delete(); //将原始文件删除，节省磁盘空间
 				}
 			}
 		}
