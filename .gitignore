@@ -3,3 +3,4 @@ target/test-classes
 /.classpath
 /.project
 /.settings
+/target

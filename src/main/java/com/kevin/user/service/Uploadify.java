@@ -6,17 +6,14 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
+import javax.ejb.Stateless;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang3.StringUtils;
-
 import com.kevin.util.Constant;
 import com.kevin.util.Util;
 
@@ -24,8 +21,9 @@ import com.kevin.util.Util;
  * 用于处理上传文件
  * @author Kevin
  */
+@Stateless
 public class Uploadify {
-	public String uplodate(HttpServletRequest request, HttpServletResponse response, String widthXheight_s) throws Exception{
+	public String uplodate(HttpServletRequest request, String widthXheight_s) throws Exception{
 		List<WidthHeight> widthHeights = new ArrayList<WidthHeight>(); //用于存各存规格
 		
 		String[] widthXheightArray = widthXheight_s.split("_"); //分出几种规格
@@ -83,7 +81,7 @@ public class Uploadify {
 							buffImg = new BufferedImage(widthHeight.getWidth(), widthHeight.getHeight(), BufferedImage.TYPE_INT_RGB);   
 							buffImg.getGraphics().drawImage(srcImg.getScaledInstance(widthHeight.getWidth(), widthHeight.getHeight(), Image.SCALE_SMOOTH), 0, 0, null);
 							String postfix = StringUtils.substringAfterLast(fileItem.getName(),".");
-							String newpath =  path + "/" + ymdhms + "_" + widthHeight.getWidth() + "_" + widthHeight.getHeight() + "." + postfix;
+							String newpath =  path + "/" + ymdhms + "_" + widthHeight.getWidth() + "x" + widthHeight.getHeight() + "." + postfix;
 							ImageIO.write(buffImg, postfix, new File(Util.upload() + newpath));
 							resultPath += newpath + ",";
 						}
